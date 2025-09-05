@@ -45,7 +45,11 @@ tasks_queue = {}
 assigned_tasks = {}
 
 # A single demo task to get started
-demo_task = Task(task_id=str(uuid.uuid4()), payload={"message": "print 'Hello world!'"})
+# A single demo task to get started
+demo_task = Task(
+    task_id=str(uuid.uuid4()),
+    payload=TaskPayload(message="print 'Hello world!'")
+)
 tasks_queue[demo_task.task_id] = demo_task
 
 # The lease duration for a task
@@ -136,6 +140,8 @@ def get_all_tasks():
 
 openapi_schema = app.openapi()
 # You can then save this dictionary to a JSON file
-import json
-with open("openapi.json", "w") as f:
-    json.dump(openapi_schema, f, indent=2)
+if __name__ == "__main__":
+    import json
+    openapi_schema = app.openapi()
+    with open("openapi.json", "w") as f:
+        json.dump(openapi_schema, f, indent=2)
