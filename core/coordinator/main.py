@@ -7,6 +7,7 @@ import shutil
 from datetime import datetime, timedelta, timezone
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Request
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware  # <--- ADD THIS
 from starlette.staticfiles import StaticFiles
 from schema import RegisterForm, TaskPayload, Task, BasePlugin # type: ignore
 from typing import Dict, Type, Optional, Any
@@ -18,6 +19,19 @@ from plugins.hashcat import HashcatPlugin
 
 # --- FastAPI App Initialization ---
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",  # Vite default port
+        "http://localhost:3000",  # Common React port
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:3000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # --- File Storage Setup ---
 STORAGE_DIR = "file_storage"
